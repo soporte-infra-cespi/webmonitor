@@ -1,0 +1,14 @@
+{
+  "instances": [
+    {
+      "id": 0,
+      "codigo": "0",
+      "codigoDescripcion": "TEST",
+      "nombre": "Test",
+      "urlMunicipio": "https://test.dat.cespi.unlp.edu.ar",
+      "urlCore": "https://core-test.dat.cespi.unlp.edu.ar",
+      "urlSem": "https://core-test.dat.cespi.unlp.edu.ar/mobile",
+      "habilitado": true
+    }
+  ]
+}
