@@ -6,6 +6,7 @@ var pushNotifications = require('../alert/senders/pushSender/pushNotifications/p
 var express = require('express');
 var app = express();
 var secure = require('express-force-https');
+var instanceRepository = require('../repository/instance/instanceRepository.js');
 
 app.use(secure);
 app.use(express.json());
@@ -42,6 +43,13 @@ app.get('/messagingSenderId.js', function(req, res){
   var content = `var messagingSenderId = "${config.get('PUSH_MESSAGINGSENDERID')}";`
   res.set('Content-Type', 'application/javascript');
   res.send(content);
+});
+
+app.post('/upadte_municipalities', function (req,res) {
+  instanceRepository.listAll(function(instances) {
+	  global.municipalities=instances;
+	  logger.info(`Municipalities upated succesfully`);
+	  res.send('Update succesfully')
 });
 
 app.post('/api/subscribe_user', function (req, res) {
