@@ -45,7 +45,7 @@ app.get('/messagingSenderId.js', function(req, res){
   res.send(content);
 });
 
-app.post('/upadte_municipalities', function (req,res) {
+app.post('/update_municipalities', function (req,res) {
   instanceRepository.listAll(function(instances) {
 	  global.municipalities=instances;
 	  logger.info(`Municipalities upated succesfully`);
