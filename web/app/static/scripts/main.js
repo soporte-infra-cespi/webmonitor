@@ -167,3 +167,16 @@ function updateUIForPushPermissionRequired() {
   showHideDiv(permissionDivId, true);
 }
 resetUI();
+function refreshInstances() {
+	fetch('update_municipalities', {method: 'POST'}).then(res => {
+		if (res.status == 200) {
+			alert("Instancias refrescadas con éxito.");
+		} else {
+			alert("Ocurrió un error, ver resultado en consola");
+			console.error("Error refrescando instancias", res);
+		}
+	}).catch(err => {
+			alert("Ocurrió un error, ver resultado en consola");
+			console.error("Error refrescando instancias", res);
+	});
+}
