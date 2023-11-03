@@ -49,7 +49,7 @@ app.post('/update_municipalities', function (req,res) {
   instanceRepository.listAll(function(instances) {
 	  global.municipalities=instances;
 	  logger.info(`Municipalities upated succesfully`);
-	  res.send('Update succesfully')
+	  res.send('Update succesfully')});
 });
 
 app.post('/api/subscribe_user', function (req, res) {
