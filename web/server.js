@@ -1,4 +1,5 @@
 var logger =  require('../logger.js');
+var _ = require('lodash');
 var config = require('../config/config.js');
 var port = config.get('PORT');
 var pushUtils = require('../alert/senders/pushSender/utils/pushUtils.js');
@@ -7,6 +8,8 @@ var express = require('express');
 var app = express();
 var secure = require('express-force-https');
 var instanceRepository = require('../repository/instance/instanceRepository.js');
+var checker =  require('./../core/checker.js');
+var sslChecker =  require('./../core/sslChecker.js');
 
 app.use(secure);
 app.use(express.json());
@@ -46,9 +49,12 @@ app.get('/messagingSenderId.js', function(req, res){
 });
 
 app.post('/update_municipalities', function (req,res) {
+  logger.info('about to update instances by update_municipalities method')
   instanceRepository.listAll(function(instances) {
 	  global.municipalities=instances;
-	  logger.info(`Municipalities upated succesfully`);
+	  logger.info(`Municipalities upated succesfully, proceeding to check: ${_.map(global.municipalities, 'nombre').sort().join(', ')}`);
+    checker.updateInstances(global.municipalities)
+    sslChecker.updateInstances(global.municipalities)
 	  res.send('Update succesfully')});
 });
 

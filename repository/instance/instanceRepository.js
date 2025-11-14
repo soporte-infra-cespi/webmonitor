@@ -15,7 +15,18 @@ function listAll(onComplete) {
 
 function getFromProviderIndex(index,instances){
   if(index >= providers.length){
-    successFunction(instances);
+    let ignored = config.get('IGNORED_MUNICIPALITIES');
+    let instancesToSend = instances;
+    if (ignored !== undefined && ignored.trim() !== "") {
+      ignored = config.get('IGNORED_MUNICIPALITIES').split(",")
+
+      instancesToSend = _.filter(instances, inst => !_.includes(ignored, inst.nombre));
+    }
+
+    // remove down instances that are not on the new instancesToSend
+    global.actuallyDown.filterByNew(instancesToSend)
+
+    successFunction(instancesToSend);
   } else {
     providers[index].listAll(function(i){
       getFromProviderIndex(index+1,_.concat(instances,i));

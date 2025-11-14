@@ -67,6 +67,11 @@ function execute(instances, upFn, downFn) {
   setInterval(checkMunicipalities, checkInterval * 1000);
 }
 
+function updateInstances(instances) {
+  municipalities = instances;
+}
+
 module.exports = {
-  execute: execute
+  execute: execute,
+  updateInstances: updateInstances
 }

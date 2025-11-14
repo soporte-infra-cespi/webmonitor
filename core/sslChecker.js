@@ -62,6 +62,11 @@ function execute(instances,sslValidFn,sslNotValidFn){
   });
 }
 
+function updateInstances(instances) {
+  municipalities = instances;
+}
+
 module.exports = {
-  execute:execute
+  execute:execute,
+  updateInstances:updateInstances
 }
