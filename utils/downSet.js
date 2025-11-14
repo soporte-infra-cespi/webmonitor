@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var logger =  require('./../logger.js');
 var downInstances = [];
 
 function put(municipality){
@@ -25,9 +26,19 @@ function contains(municipality){
   });
 }
 
+function filterByNew(instances) {
+  logger.info(`currently down instances ${downInstances.map(d => d.instance.nombre).sort().join(', ')}`)
+  const newNames = new Set(instances.map(i => i.nombre));
+  downInstances = downInstances.filter(di => 
+    newNames.has(di.instance.nombre)
+  );
+  logger.info(`currently down instances ${downInstances.map(d => d.instance.nombre).sort().join(', ')}`)
+}
+
 module.exports = {
   put:put,
   remove:remove,
   contains:contains,
-  getLog:getLog
+  getLog:getLog,
+  filterByNew:filterByNew
 }

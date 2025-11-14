@@ -8,6 +8,7 @@ global.actuallyDown = require('./utils/downSet.js');
 var alertBroker = require('./alert/alertBroker.js');
 var server = require('./web/server.js');
 const humanizeDuration = require('humanize-duration');
+const UPDATE_INSTANCES_INTERVAL = 30 * 60 * 1000; //30 minutes
 
 function sslValid(municipality,isNextToExpire,certificate){
   if(isNextToExpire){
@@ -40,10 +41,24 @@ function isDown(municipality){
   }
 }
 
+function updateInstances() {
+  logger.info('about to update instances by setInterval')
+  instanceRepository.listAll(function(instances) {
+      global.municipalities=instances;
+      logger.info(`Municipalities upated succesfully, proceeding to check: ${_.map(global.municipalities, 'nombre').sort().join(', ')}`);
+      checker.updateInstances(global.municipalities)
+      sslChecker.updateInstances(global.municipalities)
+    });
+  setInterval(updateInstances, UPDATE_INSTANCES_INTERVAL);
+}
+
 function startApp(){
   server.start();
   sslChecker.execute(global.municipalities,sslValid,sslNotValid);
   checker.execute(global.municipalities,isUp,isDown);
+
+  // update instances every 30 minutes
+  setInterval(updateInstances, UPDATE_INSTANCES_INTERVAL);
 }
 
 instanceRepository.listAll(function(instances) {
