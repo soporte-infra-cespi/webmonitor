@@ -18,11 +18,21 @@ function initialize() {
 
 function listAll(onComplete){
   logger.debug('Getting instances using firebase...');
-  db.collection(config.get('FIREBASE_COLLECTION')).get()
-    .then((snapshot) => {
-      var municipalities = [];
-      snapshot.forEach((doc) => {
-        municipalities.push(doc.data());
+  
+  const collectionsString = config.get('FIREBASE_COLLECTION');
+  const collectionNames = collectionsString.split(',').map(name => name.trim());
+  
+  const promises = collectionNames.map(collectionName => {
+    return db.collection(collectionName).get();
+  });
+  
+  Promise.all(promises)
+    .then((snapshots) => {
+      const municipalities = [];
+      snapshots.forEach((snapshot) => {
+        snapshot.forEach((doc) => {
+          municipalities.push(doc.data());
+        });
       });
       onComplete(municipalities);
     })
